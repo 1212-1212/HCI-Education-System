@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test</title>
+</head>
+<script>
+    window.onload = countDown
+
+    function countDown() {
+        let timeLeft = 60;
+        let timer = setInterval(function () {
+            if (timeLeft <= 0) {
+                disableInput()
+                clearInterval(timer);
+            }
+            document.getElementById('countDown').innerHTML = "Time left: " + `${timeLeft}` + " seconds<br>"
+            timeLeft -= 1;
+
+
+        }, 1000);
+    }
+
+    function disableInput() {
+       // let inputElements = Array.from(document.getElementsByTagName('input'))
+        document.getElementById('submit').click()
+       // inputElements.forEach(element => {
+         //   element.setAttribute('disabled', true)
+       // })
+
+    }
+</script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+<body>
+<h1 style="color: white" class="mt-5 text-center" id="countDown">Time left: </h1>
+<div class="container justify-content center mt-5 mb-5">
+    <form method="post" action="" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% for question, choices in queryset.items %}
+            <div class="justify-content center mb-5">
+                <div class="form-group justify-content center">
+                    {% if question.question_content != "" %}
+                        <label for="question" class="mt-5">{{ question.question_content }}</label>
+                    {% endif %}
+                    <div class="mt-5 justify-content center">
+                        {% if question.question_content_image %}
+                            <label for="question"><img src="{{ MEDIA_URL }}{{ question.question_content_image.url }}"
+                                                       alt="1"></label>
+                            </div>
+                        {% endif %}
+                </div>
+            </div>
+            <div class="form-check">
+
+
+                {% for choice in choices %}
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="{{ question.question_content }}"
+                               value="{{ choice.choice_text }}">
+                        <label class="form-check-label">{{ choice.choice_text }}</label>
+                    </div>
+                {% endfor %}
+
+
+            </div>
+        {% endfor %}
+        <button id="submit" type="submit" class="btn btn-primary mt-5">Submit</button>
+    </form>
+</div>
+</body>
+</html>
+<style>
+    body {
+        background-image: url("https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.holisticsa.gr%2Fsites%2Fdefault%2Ffiles%2F2019-11%2Fbigdata_0.jpg&f=1&nofb=1");
+    }
+
+    b {
+        color: whitesmoke;
+    }
+
+    label {
+        color: whitesmoke;
+    }
+
+</style>

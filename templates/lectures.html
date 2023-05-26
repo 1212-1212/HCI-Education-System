@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lectures</title>
+</head>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#"></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            <a class="nav-item nav-link" href="{% url 'index' %}">Home</a>
+            <a class="nav-item nav-link active" href="{% url 'lectures' %}">Lectures</a>
+            <a class="nav-item nav-link" href="{% url 'tests' %}">Tests</a>
+            <a class="nav-item nav-link" href="{% url 'forum' %}">Forum</a>
+
+            <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<div class="row justify-content center text-center mt-5" style="color: whitesmoke">
+<h1>{{ lectures.first.course.name }}</h1>
+</div>
+
+<div class="container justify-content left mt-5">
+    <section class="intro">
+        <div class="bg-image h-100"
+             style="background-image: url('https://financialservicesblog.accenture.com/wp-content/uploads/2020/10/AI_Concept.jpg');">
+            <div class="mask d-flex align-items-center h-100">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-12">
+                            <div class="card mask-custom">
+                                <div class="card-body">
+
+                                    <div class="table-responsive">
+                                        <table class="table table-borderless text-white mb-0">
+                                            <thead>
+                                            <tr>
+                                                <th scope="col"># Week</th>
+                                                <th scope="col">Title</th>
+                                                <th scope="col">Action</th>
+
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for lecture in lectures %}
+                                                <tr>
+                                                    <th scope="row">{{ lecture.order_no }}</th>
+                                                    <td>{{ lecture.title }}</td>
+
+{#                                                <td style="width: 120px"><a  class="btn btn-primary" style="width: 120px" href="{% url 'video' %}">Go to lecture</a> </td>#}
+                                                <td>
+                                                         <div class="col">
+                                                 <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+         <input type="text" name="name" maxlength="50" class="form-control" required="" id="id_name"  value="{{ lecture.title }}" style="width: 0; height: 0">
+    <div class="button">
+         <button type="submit" class="btn btn-primary" style="bottom: 12px; position: relative;">Go to lecture!</button>
+    </div>
+    </form>
+                                                </div>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+</body>
+</html>
+<style>
+    html,
+body,
+.intro {
+  height: 100%;
+}
+
+table td,
+table th {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+label
+{
+    color: white;
+}
+.mask-custom {
+  background: rgba(24, 24, 16, .2);
+  border-radius: 2em;
+  backdrop-filter: blur(25px);
+  border: 2px solid rgba(255, 255, 255, 0.05);
+  background-clip: padding-box;
+  box-shadow: 10px 10px 10px rgba(46, 54, 68, 0.03);
+}
+body
+{
+    background-image: url("https://financialservicesblog.accenture.com/wp-content/uploads/2020/10/AI_Concept.jpg");
+}
+.form-control
+{
+    visibility: hidden;
+}
+</style>

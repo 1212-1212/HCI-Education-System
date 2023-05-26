@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Forum</title>
+</head>
+<body>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#"></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            <a class="nav-item nav-link" href="{% url 'index' %}">Home</a>
+            <a class="nav-item nav-link" href="{% url 'lectures' %}">Lectures</a>
+            <a class="nav-item nav-link" href="{% url 'tests' %}">Tests</a>
+            <a class="nav-item nav-link active" href="{% url 'forum' %}">Forum</a>
+
+            <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
+        </div>
+    </div>
+</nav>
+<section style="background-color: #eee;">
+<div class="container my-5 py-5">
+
+    <form enctype="multipart/form-data" method="post">
+           {% csrf_token %}
+    {{ post_form.as_p }}
+
+     <div class="button">
+                                        <button type="submit" class="btn btn-primary">Post</button>
+                                    </div>
+          </form>
+</div>
+
+    {% for post, comments in query_dict.items %}
+        <div class="container my-5 py-5">
+            <div class="row d-flex justify-content-center">
+                <div class="col-md-12 col-lg-10 col-xl-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex flex-start align-items-center">
+                                <div>
+                                    <h6 class="fw-bold text-primary mb-1">{{ post.author }}</h6>
+                                    <p class="text-muted small mb-0">
+                                        {{ post.date_published }}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <p class="mt-3 mb-4 pb-2">
+                                {{ post.text }}
+                            </p>
+                        </div>
+
+                        <div class="card-footer py-3 border-0" style="background-color: #f8f9fa;">
+                            <div class="d-flex flex-start w-100">
+                                <div class="form-outline w-100">
+                                    {% for comment in comments %}
+                                        <h6 class="fw-bold text-primary mb-1">{{ comment.author }}</h6>
+                                        <p class="text-muted small mb-0">
+                                            {{ comment.date_published }}
+
+                                        </p>
+                                        <textarea class="form-control" id="textAreaExample" rows="4"
+                                                  style="background: #fff;" disabled>{{ comment.content }}</textarea>
+    {% endfor %}
+                                        </div>
+
+                            </div>
+
+                            <div class="mb-5">
+
+                                <form method="post" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    {{ comment_form.as_p }}
+                                    {% with comment_form.post as post %}
+                                        {{ comment_form.save }}
+
+                                    {% endwith %}
+                                    <select name="post"  class="form-control" required="" id="id_post">
+<option value="{{ post }}" selected>{{ post.text }}</option>
+
+</select>
+                                    <div class="button">
+                                        <button type="submit" class="btn btn-primary">Post</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</section>
+</body>
+</html>
+<style>
+#id_post
+{
+    visibility: hidden;
+}
+body
+{
+    background-color: #eeeeee;
+}
+</style>

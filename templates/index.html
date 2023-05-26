@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+</head>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#"></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    {% if learner.is_registered and learner.is_logged_in %}
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            <a class="nav-item nav-link active" href="{% url 'index' %}">Home</a>
+            <a class="nav-item nav-link" href="{% url 'lectures' %}">Lectures</a>
+            <a class="nav-item nav-link" href="{% url 'tests' %}">Tests</a>
+            <a class="nav-item nav-link" href="{% url 'forum' %}">Forum</a>
+            <a class="nav-item nav-link" href="{% url 'logout' %}">Log out</a>
+        </div>
+    </div>
+    {% else %}
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            <a class="nav-item nav-link active" href="{% url 'index' %}">Home</a>
+            <a class="nav-item nav-link" href={% url 'login' %}>Log in</a>
+            <a class="nav-item nav-link" href="{% url 'register' %}">Register</a>
+        </div>
+    </div>
+    {% endif %}
+</nav>
+<div class="container justify-content center mt-5 text-center mb-5">
+        <div class="row">
+        {% if learner.is_logged_in %}
+        <h1 class="welcome text-white" id="welcomeH1">Welcome, {{ learner.welcome }}.</h1>
+
+        {% else %}
+        <h1 class="welcome text-white" id="welcomeH1">Welcome, Guest.</h1>
+      {% endif %}
+        <div class="col-12">
+        <h3 class="welcome text-white mt-5 mb-5">Select a course you would like to enroll to:</h3>
+        <div class="row mb-5 mt-5">
+    </div>
+
+        <div class="container">
+        <div class="row justify-content-center mb-5">
+        {% for course in courses %}
+            <div class="card col-3 me-5 mt-5" style="width: 500px">
+  <img src="{{ MEDIA_URL}}{{ course.image.url }}" class="card-img-top" alt="{{ course.id }}" style="width: 476px;height: 200px">
+  <div class="card-body">
+    <h5 class="card-title">{{ course.name }}</h5>
+    <p class="card-text"><strong>Instructors: </strong>{{ course.instructors_string }}</p>
+      <p class="card-text"><strong>Course description: </strong><br>{{ course.shortened_description }}</p>
+     <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+         <input type="text" name="name" maxlength="50" class="form-control" required="" id="id_name"  value="{{ course.name }}">
+         {% if learner.is_registered and learner.is_logged_in %}
+        <div class="button">
+             <button type="submit" class="btn btn-primary" style="bottom: -12px; position: relative;">Enroll now!</button>
+        </div>
+         {% else %}
+          <div class="button">
+             <button type="submit" class="btn btn-primary" style="bottom: -12px; position: relative;" disabled>Enroll now!</button>
+        </div>
+         {% endif %}
+    </form>
+  </div>
+</div>
+
+
+        {% endfor %}
+        </div>
+        </div>
+
+            </div>
+        </div>
+        </div>
+
+
+
+
+
+</body>
+</html>
+<style>
+    body {
+        background-repeat: round;
+        background-image: url("https://financialservicesblog.accenture.com/wp-content/uploads/2020/10/AI_Concept.jpg");
+    }
+    label
+    {
+        color: white;
+    }
+    .form-control {
+        visibility: hidden;
+    }
+</style>
